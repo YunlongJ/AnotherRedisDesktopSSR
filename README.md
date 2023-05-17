@@ -120,62 +120,9 @@ npm run pack:mac
 # on linux
 npm run pack:linux
 ```
-
-## Sponsor
-
-- Give me a star ⭐ or upvote on [Producthunt](https://www.producthunt.com/posts/another-redis-desktop-manager)
-- Through [OpenCollective](https://opencollective.com/AnotherRedisDesktopManager)
-- If you are a Mac user, you can purchase this software from the [app store](https://apps.apple.com/app/id1516451072) to sponsor, and then let the app store automatically update it for you.
-<br>[![app store](https://cdn.jsdelivr.net/gh/qishibo/img/avail_app_store180.svg)](https://apps.apple.com/app/id1516451072)
-- If you are a Windows user, you can purchase this software from the [win store](https://www.microsoft.com/store/apps/9MTD84X0JFHZ) to sponsor.
-<br>[![windows store](https://cdn.jsdelivr.net/gh/qishibo/img/windows-store-icon182-56.png)](https://www.microsoft.com/store/apps/9MTD84X0JFHZ)
-- Wechat sponsor code [Sponsor me a cup of coffee ☕]
-
-  <img width="150px" src="https://cdn.jsdelivr.net/gh/qishibo/img/202109031655807.jpeg" />
-
-
-## Contributors
-
-This project exists thanks to all the people who contribute.
-[![contributors](https://opencollective.com/AnotherRedisDesktopManager/contributors.svg?width=890&button=false)](https://github.com/qishibo/AnotherRedisDesktopManager/graphs/contributors)
-[![backers](https://opencollective.com/AnotherRedisDesktopManager/backers.svg)](https://opencollective.com/AnotherRedisDesktopManager)
-
-
-## Custom Viewer
-
-> When the default viewer does not meet the needs, you can format your content via customize script.
-<br>Method: Pull down the viewer list to the bottom, click "Custom -> Add", and then refer to the instructions below
-<br>Note: The script needs to output formatted content through `print` `console.log` `echo` etc., which can be any string or JSON string
-
-| Config | Description |
-| ------ | ------ |
-| `Name` | Custom name |
-| `Command` | Executable commands, such as `xxx.py` `xxx.js` `xxx.class` etc. The file needs `x` permission, which can be executed in the form of `./xxx.py`; It can also be set to `/bin/node` `/bin/bash` or other system commands, and the script path needs to be placed in Params |
-| `Params` | Parameters spliced after `Command`, such as "--key `{KEY}` --value `{VALUE}`", where `{KEY}` and `{VALUE}` will be replaced with the corresponding Redis key and value. Note that if the content is invisible such as binary, you can use `{HEX}` instead of `{VALUE}`, and `{HEX}` will be replaced with the hexadecimal string |
-
-### Configuration example：
-> Add env to the first line of the script, the final executed command is: `./home/qii/pickle_decoder.py {HEX}`, the script can receive parameters via `argv[1]`
-
-| Command | Params |
-| ------ | ------ |
-| `/home/qii/pickle_decoder.py` | `{HEX}` |
-| `/home/qii/shell_decoder.sh` | `{VALUE}` |
-
-### Without execute permission `x`：
-> The final executed command is: `/bin/node /home/qii/node_decoder.js {HEX} --key={KEY}`, the script can receive parameters via `argv[1]`
-
-| Command | Params |
-| ------ | ------ |
-| `/bin/bash` | `/home/qii/shell_decoder.sh {VALUE}` |
-| `/bin/node` | `/home/qii/node_decoder.js {HEX} --key={KEY}` |
-
-
 ## License
 
 [MIT](LICENSE)
 
 
-## Support
-
-[goanother.com](https://goanother.com/) &nbsp; [Producthunt](https://www.producthunt.com/posts/another-redis-desktop-manager) &nbsp; [Twitter@shibo](https://twitter.com/qii404) &nbsp; [Download Analysis](https://qii404.me/github-release-statistics/?repo=/qishibo/AnotherRedisDesktopManager/)
 
