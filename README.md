@@ -4,7 +4,7 @@
 
 <hr/>
 
-> 原作者很久没怎么更新了...
+> 原作者还没怎么支持sockv5, 有空再给他提个pr
 
 ## Feature Log
 - 2023-05-16: support sockv5 and update electron version
