@@ -40,6 +40,7 @@
       <!-- other operation -->
       <el-form-item label="">
         <el-checkbox v-model="sshOptionsShow">SSH</el-checkbox>
+        <el-checkbox v-model="socksOptionsShow">SOCK</el-checkbox>
         <el-checkbox v-model="sslOptionsShow">SSL</el-checkbox>
         <el-checkbox v-model="sentinelOptionsShow">
           Sentinel
@@ -151,6 +152,28 @@
       </el-row>
     </el-form>
 
+    <el-form v-if="socksOptionsShow" v-show="socksOptionsShow" label-position='top' label-width="90px">
+      <fieldset>
+        <legend>Socks Tunnel</legend>
+      </fieldset>
+
+      <el-row :gutter=20>
+        <!-- left col -->
+        <el-col :span=12>
+          <el-form-item :label="$t('message.host')" required>
+            <el-input v-model="connection.socksOptions.host" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+
+        <!-- right col -->
+        <el-col :span=12>
+          <el-form-item :label="$t('message.port')" required>
+            <el-input type='number' v-model="connection.socksOptions.port" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+
     <!-- Sentinel connection form -->
     <el-form v-if="sentinelOptionsShow" v-show="sentinelOptionsShow" label-position='top' label-width="90px">
       <fieldset>
@@ -201,6 +224,11 @@ export default {
         separator: ':',
         cluster: false,
         connectionReadOnly: false,
+        socksOptions: {
+          host: '',
+          port: '',
+          type: 5,
+        },
         sshOptions: {
           host: '',
           port: 22,
@@ -209,6 +237,10 @@ export default {
           privatekey: '',
           passphrase: '',
           timeout: 30,
+          srcHost: '127.0.0.1',
+          srcPort: 12349,
+          destHost: '',
+          destPort: 22,
         },
         sslOptions: {
           key: '',
@@ -224,6 +256,7 @@ export default {
       sshOptionsShow: false,
       sslOptionsShow: false,
       sentinelOptionsShow: false,
+      socksOptionsShow: false,
     }
   },
   components: {FileInput, InputPassword},
@@ -249,9 +282,10 @@ export default {
     resetFields() {
       // edit connection mode
       if (this.editMode) {
-        this.sshOptionsShow = !!this.config.sshOptions
-        this.sslOptionsShow = !!this.config.sslOptions
-        this.sentinelOptionsShow = !!this.config.sentinelOptions
+        this.sshOptionsShow = !!this.config.sshOptions;
+        this.sslOptionsShow = !!this.config.sslOptions;
+        this.sentinelOptionsShow = !!this.config.sentinelOptions;
+        this.socksOptionsShow = !!this.config.socksOptions;
         // recovery connection before edit
         let connection = Object.assign({}, this.connectionEmpty, this.config);
         this.connection = JSON.parse(JSON.stringify(connection));
@@ -259,6 +293,7 @@ export default {
       // new connection mode
       else {
         this.sshOptionsShow = false;
+        this.socksOptionsShow = false;
         this.sslOptionsShow = false;
         this.sentinelOptionsShow = false;
         this.connection = JSON.parse(JSON.stringify(this.connectionEmpty));
@@ -281,10 +316,13 @@ export default {
       if (!this.sslOptionsShow) {
         delete config.sslOptions;
       }
-
+      if (!this.socksOptionsShow) {
+        delete config.socksOptions;
+      }
       if (!this.sentinelOptionsShow || !config.sentinelOptions.masterName) {
         delete config.sentinelOptions;
       }
+
 
       const oldKey = storage.getConnectionKey(this.config);
       storage.editConnectionByKey(config, oldKey);
@@ -302,7 +340,7 @@ export default {
       this.sslOptionsShow = !!this.config.sslOptions;
       this.sshOptionsShow = !!this.config.sshOptions;
       this.sentinelOptionsShow = !!this.config.sentinelOptions;
-
+      this.socksOptionsShow = !!this.config.socksOptions;
       this.connection = Object.assign({}, this.connection, this.config);
     }
 

@@ -125,7 +125,7 @@ export default {
         }
       }
     },
-    loadAllKeys(){
+    loadAllKeys() {
       this.resetKeyList();
       this.loadingAll = true;
       this.$parent.$parent.$parent.$refs.operateItem.searchIcon = 'el-icon-loading';
@@ -135,15 +135,14 @@ export default {
       let nodes = this.client.nodes ? this.client.nodes('master') : [this.client];
       let keysPageSize = loadAll ? 50000 : this.keysPageSize;
       this.scanningCount = nodes.length;
-
+      console.log(nodes.length);
       nodes.map(node => {
         let scanOption = {
           match: this.getMatchMode(),
           count: keysPageSize,
-        }
-
+        };
         // scan count is bigger when in search mode
-        scanOption.match != '*' && (scanOption.count = this.searchPageSize);
+        scanOption.match !== '*' && (scanOption.count = this.searchPageSize);
 
         let stream = node.scanBufferStream(scanOption);
         this.scanStreams.push(stream);
@@ -176,7 +175,6 @@ export default {
         stream.on('error', (e) => {
           this.$parent.$parent.$parent.$refs.operateItem.searchIcon = 'el-icon-search';
           this.loadingAll = false;
-
           // scan command disabled, other functions may be used normally
           if (
             (e.message.includes('unknown command') && e.message.includes('scan')) ||

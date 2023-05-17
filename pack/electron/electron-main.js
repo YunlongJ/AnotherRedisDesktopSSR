@@ -24,7 +24,7 @@ process.on('uncaughtException', (err, origin) => {
 
   dialog.showMessageBoxSync(mainWindow, {
     type: 'error',
-    title: 'Whoops! Uncaught Exception', 
+    title: 'Whoops! Uncaught Exception',
     message: err.stack,
     detail: '\nDon\'t worry, I will fix it! 😎😎\n\n'
             + 'Submit issue to: \nhttps://github.com/qishibo/AnotherRedisDesktopManager/'
@@ -57,12 +57,11 @@ function createWindow() {
       contextIsolation: false,
     },
   });
-
+  require('@electron/remote/main').initialize();
+  require('@electron/remote/main').enable(mainWindow.webContents);
   if (lastWinStage.maximized) {
     mainWindow.maximize();
   }
-
-  winState.watchClose(mainWindow);
 
   // and load the index.html of the app.
   if (APP_ENV === 'production') {
@@ -79,7 +78,6 @@ function createWindow() {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
-
   mainWindow.on('close', () => {
     mainWindow.webContents.send('closingWindow');
   });

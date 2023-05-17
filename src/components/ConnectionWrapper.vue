@@ -102,17 +102,14 @@ export default {
           if (client.readyInited) {
             return;
           }
-
           client.readyInited = true;
           // open status tab
           this.$bus.$emit('openStatus', client, this.config.connectionName);
           this.startPingInterval();
-
           this.initShow();
           callback && callback();
         });
       }
-
       // connection is ready
       else {
         this.initShow();
@@ -121,7 +118,7 @@ export default {
     },
     closeConnection(connectionName) {
       // if connectionName is not passed, close all connections
-      if (connectionName && (connectionName != this.config.connectionName)) {
+      if (connectionName && (connectionName !== this.config.connectionName)) {
         return;
       }
 
@@ -153,26 +150,26 @@ export default {
       const configCopy = JSON.parse(JSON.stringify(config));
       // select db
       configCopy.db = this.lastSelectedDb;
-
+      let clientPromise;
       // ssh client
       if (configCopy.sshOptions) {
-        var clientPromise = redisClient.createSSHConnection(
-          configCopy.sshOptions, configCopy.host, configCopy.port, configCopy.auth, configCopy);
+        clientPromise = redisClient.createSSHConnection(configCopy.sshOptions, configCopy.host, configCopy.port, configCopy.auth, configCopy);
+      } if (configCopy.socksOptions) {
+        clientPromise = redisClient.createSockConnection(configCopy.socksOptions, configCopy.auth, configCopy);
       }
       // normal client
       else {
-        var clientPromise = redisClient.createConnection(
+        clientPromise = redisClient.createConnection(
           configCopy.host, configCopy.port, configCopy.auth, configCopy);
       }
 
       clientPromise.then((client) => {
         this.client = client;
-
         client.on('error', (error) => {
           this.$message.error({
-            message: 'Client On Error: ' + error + ' Config right?',
+            message: `Client On Error: ${  error } Config right?`,
             duration: 3000,
-            customClass: 'redis-on-error-message'
+            customClass: 'redis-on-error-message',
           });
 
           this.$bus.$emit('closeConnection');
@@ -215,7 +212,7 @@ export default {
           }
 
           document.querySelector('.connections-list').scrollTo({
-            top: scrollTop, 
+            top: scrollTop,
             behavior: 'smooth',
           });
         }, 320);

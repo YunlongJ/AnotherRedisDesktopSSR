@@ -6,13 +6,14 @@
   "private": true,
   "main": "electron-main.js",
   "dependencies": {
+    "@electron/remote": "^2.0.9",
     "electron-updater": "4.6.5",
     "font-list": "^1.4.5"
   },
   "repository": "github:qishibo/AnotherRedisDesktopManager",
   "build": {
     "appId": "me.qii404.another-redis-desktop-manager",
-    "productName": "Another Redis Desktop Manager",
+    "productName": "ARedisSPVersion",
     "artifactName": "${productName}.${version}.${ext}",
     "copyright": "Copyright © 2022 qii404.me",
     "asar": true,
@@ -20,18 +21,20 @@
       "output": "build-apps",
       "buildResources": "./"
     },
-    "electronVersion": "12.2.3",
+    "electronVersion": "24.3.0",
     "files": [
       "!static/js/*.map",
       "!static/css/*.map",
       "!*.map"
     ],
-    "publish": [{
-      "provider": "github",
-      "owner": "qishibo",
-      "repo": "AnotherRedisDesktopManager",
-      "releaseType": "prerelease"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "qishibo",
+        "repo": "AnotherRedisDesktopManager",
+        "releaseType": "prerelease"
+      }
+    ],
     "win": {
       "icon": "icons/icon.ico",
       "target": [
@@ -52,7 +55,10 @@
       ]
     },
     "snap": {
-      "plugs": ["default", "ssh-keys"]
+      "plugs": [
+        "default",
+        "ssh-keys"
+      ]
     },
     "mac": {
       "icon": "icons/icon.icns",

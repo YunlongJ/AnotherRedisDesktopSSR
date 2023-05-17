@@ -23,8 +23,8 @@
 import JsonEditor from '@/components/JsonEditor';
 import { getData } from 'rawproto';
 // import * as protobuf from 'protobufjs';
-const protobuf = require("protobufjs/minimal");
-const { dialog } = require('electron').remote;
+const protobuf = require('protobufjs/minimal');
+const { dialog } = require('@electron/remote');
 
 export default {
   data() {
