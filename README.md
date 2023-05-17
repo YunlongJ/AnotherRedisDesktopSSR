@@ -1,68 +1,13 @@
 <img align="right" width="120" src="https://cdn.jsdelivr.net/gh/qishibo/img/ano-square-icon-128.png">
 
-# Another Redis Desktop Manager 
+# Another Redis Desktop Manager （fork from https://github.com/qishibo/AnotherRedisDesktopManager）
 
 <hr/>
 
-> 🚀🚀🚀 A faster, better and more stable redis desktop manager, compatible with Linux, windows, mac. What's more, it won't crash when loading massive keys.
-
-[![MIT](https://img.shields.io/badge/license-MIT-000000.svg)](LICENSE)
-[![Download](https://img.shields.io/github/release/qishibo/AnotherRedisDesktopManager.svg?label=Download)](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
-[![Download Analysis](https://img.shields.io/badge/Download-Analysis-blue.svg)](https://qii404.me/github-release-statistics/?repo=/qishibo/AnotherRedisDesktopManager/)
-[![Twitter](https://img.shields.io/badge/Twitter-@shibo-blue.svg)](https://twitter.com/qii404)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fqishibo%2FAnotherRedisDesktopManager.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fqishibo%2FAnotherRedisDesktopManager?ref=badge_shield)
-<a href="https://www.producthunt.com/posts/another-redis-desktop-manager?utm_source=badge-featured"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=340552&theme=dark" height="20" width="93" /></a>
-
-
-[简体中文](README.zh-CN.md)
-
-
-## Windows
-
-- Download latest [exe](https://github.com/qishibo/AnotherRedisDesktopManager/releases) package from release [or [gitee](https://gitee.com/qishibo/AnotherRedisDesktopManager/releases) in China], double click to install.
-- Or by **chocolatey**: `choco install another-redis-desktop-manager`
-- Or by **winget**: `winget install qishibo.AnotherRedisDesktopManager`
-- Or **sponsor** by win store, It's not free, and I will be very grateful to you.
-<br/><a href="https://www.microsoft.com/store/apps/9MTD84X0JFHZ?cid=storebadge&ocid=badge"><img src="https://cdn.jsdelivr.net/gh/qishibo/img/microsoft-store.png" height="58" width="180" alt="get from microsoft store"></a>
-
-## Linux
-
-- Download latest [AppImage](https://github.com/qishibo/AnotherRedisDesktopManager/releases) package from release [or [gitee](https://gitee.com/qishibo/AnotherRedisDesktopManager/releases) in China], `chmod +x`, double click to run.
- - Or by **snap**: `sudo snap install another-redis-desktop-manager`
- **Tips**: If permission denied when selecting private key, run `sudo snap connect another-redis-desktop-manager:ssh-keys` to give access to ~/.ssh folder.
-<br/>[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/another-redis-desktop-manager)
-
-
-## Mac
-
-> If you can't open it after installation by brew or dmg, exec the following command then reopen:<br>`sudo xattr -rd com.apple.quarantine /Applications/Another\ Redis\ Desktop\ Manager.app`
-
-- Download latest [dmg](https://github.com/qishibo/AnotherRedisDesktopManager/releases) package from release [or [gitee](https://gitee.com/qishibo/AnotherRedisDesktopManager/releases) in China], double click to install.
-- Or by **brew**: `brew install --cask another-redis-desktop-manager`
-- Or **sponsor** by app store, It's not free, and I will be very grateful to you.
-<br/>[![get from app store](https://cdn.jsdelivr.net/gh/qishibo/img/avail_app_store180.svg)](https://apps.apple.com/app/id1516451072)
-
-<!--
-> If **Mac** warning `Another Desktop Manager can't be opened because it is from an unidentified developer`. Open `Settings->Security` and click **`Open Anyway`**
-
-![can't be opened because it is from an unidentified developer](https://cdn.jsdelivr.net/gh/qishibo/img/1630655841115-mac-warning.png)
-
-![Settings->Security Open Anyway](https://cdn.jsdelivr.net/gh/qishibo/img/1630655842331-5d11c4feeaf6f.jpg)
--->
-
-## Enjoy!
-
-![redis status dark](https://cdn.jsdelivr.net/gh/qishibo/img/1630655843497-status.png)
-
-![redis key hash dark](https://cdn.jsdelivr.net/gh/qishibo/img/1630655844559-str.png)
-
-![redis console dark](https://cdn.jsdelivr.net/gh/qishibo/img/1630655846107-cli.png)
-
-![redis exec log](https://cdn.jsdelivr.net/gh/qishibo/img/1630655847740-log.png)
-
+> 原作者很久没怎么更新了...
 
 ## Feature Log
-
+- 2023-05-16: support sockv5 and update electron version
 - 2022-10-07: Arrow Keys support in key list && Memory Analysis in folder
 - 2022-08-05: Clone Connection && Tabs Contextmenu\Mousewheel Support
 - 2022-04-01: Protobuf Support && Memory Analysis
