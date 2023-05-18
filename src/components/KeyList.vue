@@ -58,16 +58,16 @@ export default {
     };
   },
   props: ['client', 'config', 'globalSettings'],
-  components: {KeyListVirtualTree},
+  components: { KeyListVirtualTree },
   computed: {
     keysPageSize() {
-      let keysPageSize = parseInt(this.globalSettings['keysPageSize']);
-      return keysPageSize ? keysPageSize : 500;
+      const keysPageSize = parseInt(this.globalSettings.keysPageSize);
+      return keysPageSize || 500;
     },
-    showLoadAllKeys(){
+    showLoadAllKeys() {
       // force show
       return true;
-      return this.globalSettings['showLoadAllKeys'];
+      return this.globalSettings.showLoadAllKeys;
     },
     searching() {
       return this.$parent.$parent.$parent.$refs.operateItem.searchIcon == 'el-icon-loading';
@@ -120,7 +120,7 @@ export default {
         this.onePageList = [];
         this.onePageFinishedCount = 0;
 
-        for (var stream of this.scanStreams) {
+        for (const stream of this.scanStreams) {
           stream.resume();
         }
       }
@@ -132,22 +132,21 @@ export default {
       this.initScanStreamsAndScan(true);
     },
     initScanStreamsAndScan(loadAll = false) {
-      let nodes = this.client.nodes ? this.client.nodes('master') : [this.client];
-      let keysPageSize = loadAll ? 50000 : this.keysPageSize;
+      const nodes = this.client.nodes ? this.client.nodes('master') : [this.client];
+      const keysPageSize = loadAll ? 50000 : this.keysPageSize;
       this.scanningCount = nodes.length;
-      console.log(nodes.length);
-      nodes.map(node => {
-        let scanOption = {
+      nodes.map((node) => {
+        const scanOption = {
           match: this.getMatchMode(),
           count: keysPageSize,
         };
         // scan count is bigger when in search mode
         scanOption.match !== '*' && (scanOption.count = this.searchPageSize);
 
-        let stream = node.scanBufferStream(scanOption);
+        const stream = node.scanBufferStream(scanOption);
         this.scanStreams.push(stream);
 
-        stream.on('data', keys => {
+        stream.on('data', (keys) => {
           this.onePageList = this.onePageList.concat(keys);
 
           // scan once reaches page size
@@ -177,8 +176,8 @@ export default {
           this.loadingAll = false;
           // scan command disabled, other functions may be used normally
           if (
-            (e.message.includes('unknown command') && e.message.includes('scan')) ||
-            e.message.includes("command 'SCAN' is not allowed")
+            (e.message.includes('unknown command') && e.message.includes('scan'))
+            || e.message.includes("command 'SCAN' is not allowed")
           ) {
             this.$message.error({
               message: this.$t('message.scan_disabled'),
@@ -190,7 +189,7 @@ export default {
 
           // other errors
           this.$message.error({
-            message: 'Stream On Error: ' +  e.message,
+            message: `Stream On Error: ${e.message}`,
             duration: 1500,
           });
 
@@ -235,7 +234,7 @@ export default {
 
       this.client.exists(match).then((reply) => {
         this.keyList = (reply == 1) ? [Buffer.from(match)] : [];
-      }).catch(e => {
+      }).catch((e) => {
         this.$message.error(e.message);
       });
 
@@ -243,7 +242,7 @@ export default {
     },
     cancelScanning() {
       if (this.scanStreams.length) {
-        for (let stream of this.scanStreams) {
+        for (const stream of this.scanStreams) {
           stream.pause && stream.pause();
         }
       }
@@ -264,7 +263,7 @@ export default {
         return false;
       }
 
-      for (let i in this.keyList) {
+      for (const i in this.keyList) {
         if (this.keyList[i].equals(key)) {
           this.keyList.splice(i, 1);
           break;
@@ -276,7 +275,7 @@ export default {
         return false;
       }
 
-      for (let i in this.keyList) {
+      for (const i in this.keyList) {
         if (this.keyList[i].equals(key)) {
           // exists already
           return;
@@ -297,7 +296,7 @@ export default {
       }
     },
   },
-}
+};
 </script>
 
 <style type="text/css">

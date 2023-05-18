@@ -163,6 +163,9 @@
           <el-form-item :label="$t('message.host')" required>
             <el-input v-model="connection.socksOptions.host" autocomplete="off"></el-input>
           </el-form-item>
+          <el-form-item :label="$t('message.pre_version')" required>
+            <el-input type='number' v-model="connection.socksOptions.type" autocomplete="off"></el-input>
+          </el-form-item>
         </el-col>
 
         <!-- right col -->

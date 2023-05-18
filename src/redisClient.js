@@ -79,16 +79,19 @@ async function createClient(config) {
     return await SocksClient.createConnection(options);
   } catch (err) {
     // Handle errors
-    if (err) {
-      console.log(err);
-    }
     return null;
   }
 }
 async function createServer(options) {
   return new Promise((resolve, reject) => {
+    const errorHandler = function (error) {
+      reject(error);
+    };
     const server = net.createServer((serversocket) => {
       createClient(options.socksOptions).then((socksClient) => {
+        if (socksClient == null) {
+          return errorHandler(new Error('connect socks server failed'));
+        }
         serversocket.on('data', (data) => {
           socksClient.socket.write(data);
         });
@@ -98,11 +101,11 @@ async function createServer(options) {
         socksClient.socket.on('end', () => {
           serversocket.end();
         });
+      }).catch((e) => {
+        reject(e);
       });
     });
-    const errorHandler = function (error) {
-      reject(error);
-    };
+
     server.on('error', errorHandler);
     process.on('uncaughtException', errorHandler);
     server.listen(options);
@@ -174,34 +177,60 @@ export default {
     socksOptionsRaw.dstHost = config.host;
     socksOptionsRaw.dstPort = config.port;
     return new Promise((resolve, reject) => {
-      createSockTunnel(socksOptionsRaw).then(([server, connection]) => {
-        const listenAddress = server.address();
-        if (configRaw.cluster) {
-          const client = this.createConnection(listenAddress.address, listenAddress.port, auth, configRaw, false, true);
-          client.on('ready', () => {
-            // get all cluster nodes info
-            client.call('cluster', 'nodes').then((reply) => {
-              const nodes = this.getClusterNodes(reply);
-              // create ssh tunnel for each node
-              this.createClusterSockTunnels(socksOptions, nodes).then((tunnels) => {
-                configRaw.natMap = this.initNatMap(tunnels);
-                // select first line of tunnels to connect
-                console.log(tunnels);
-                const clusterClient = this.createConnection(tunnels[0].localHost, tunnels[0].localPort, auth, configRaw, false);
-                resolve(clusterClient);
-              });
-            }).catch((e) => {
-              console.log(e);
+      createSockTunnel(socksOptionsRaw)
+        .then(([server]) => {
+          const listenAddress = server.address();
+          if (configRaw.sentinelOptions) {
+            const client = this.createConnection(listenAddress.address, listenAddress.port, auth, configRaw, false, true, true);
+            client.on('ready', () => {
+              client.call('sentinel', 'get-master-addr-by-name', configRaw.sentinelOptions.masterName).then((reply) => {
+                if (!reply) {
+                  return reject(new Error(`Master name "${configRaw.sentinelOptions.masterName}" not exists!`));
+                }
+                // connect to the master node via ssh
+                this.createClusterSockTunnels(socksOptionsRaw, [{ host: reply[0], port: reply[1] }])
+                  .then((tunnels) => {
+                    const sentinelClient = this.createConnection(
+                      tunnels[0].localHost, tunnels[0].localPort,
+                      configRaw.sentinelOptions.nodePassword,
+                      configRaw, false, true,
+                    );
+                    return resolve(sentinelClient);
+                  });
+              }).catch((e) => {
+                reject(e);
+              }); // sentinel exec failed
+            });
+
+            client.on('error', (e) => {
               reject(e);
             });
-          });
+          } else if (configRaw.cluster) {
+            const client = this.createConnection(listenAddress.address, listenAddress.port, auth, configRaw, false, true);
+            client.on('ready', () => {
+            // get all cluster nodes info
+              client.call('cluster', 'nodes').then((reply) => {
+                const nodes = this.getClusterNodes(reply);
+                // create ssh tunnel for each node
+                this.createClusterSockTunnels(socksOptions, nodes).then((tunnels) => {
+                  configRaw.natMap = this.initNatMap(tunnels);
+                  // select first line of tunnels to connect
+                  const clusterClient = this.createConnection(tunnels[0].localHost, tunnels[0].localPort, auth, configRaw, false);
+                  resolve(clusterClient);
+                });
+              }).catch((e) => {
+                reject(e);
+              });
+            });
 
-          client.on('error', (e) => {
-            console.log('error cluster');
-            reject(e);
-          });
-        }
-      });
+            client.on('error', (e) => {
+              reject(e);
+            });
+          } else {
+            const client = this.createConnection(listenAddress.address, listenAddress.port, auth, configRaw, false);
+            return resolve(client);
+          }
+        });
     });
   },
 
